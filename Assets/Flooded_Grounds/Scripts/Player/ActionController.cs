@@ -4,8 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+
 public class ActionController : MonoBehaviour
 {
+    [SerializeField]
+    LeverBody leverBody;
+
 
     [SerializeField]
     private float range;
@@ -23,15 +27,14 @@ public class ActionController : MonoBehaviour
 
     [SerializeField]
     private Inventory inventory;
-    
-    [SerializeField]
-    AudioSource audioSource;
-    [SerializeField]
-    public AudioClip getItemSound;
-    public AudioClip openSound;
-    public AudioClip failSound;
-    public AudioClip PullLeverSound;
 
+    [SerializeField]
+    public AudioClip failSound;
+
+    AudioSource audioSource;
+ 
+    [SerializeField]
+    AudioClip getItemSound;
 
     private bool GetLever = false;
     
@@ -91,9 +94,9 @@ public class ActionController : MonoBehaviour
             if(GetLever)
             {
                 //레버 내려감 + effect 사라짐 + 문열림 애니메이션 작동
-                PlaySound("OPEN");
-                PlaySound("PULLLEVER");
+                leverBody.IsGateOpen(true);
                 InfoDisappear();
+                
             }
             else
             {
@@ -152,12 +155,6 @@ public class ActionController : MonoBehaviour
                 break;
             case "FAIL":
                 audioSource.clip = failSound;
-                break;
-            case "OPEN":
-                audioSource.clip = openSound;
-                break;
-            case "PULLLEVER":
-                audioSource.clip = PullLeverSound;
                 break;
         }
         audioSource.Play();

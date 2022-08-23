@@ -19,12 +19,13 @@ public class PlayerController : MonoBehaviour
     private CharacterController characterController;
 
     [SerializeField]
-    private AudioSource audioSource;
     public AudioClip runSound;
     public AudioClip walkSound;
     public AudioClip deadInWater;
     public AudioClip scream;
     public AudioClip jumpSound;
+    
+    AudioSource audioSource;
 
     private bool isMoving;
 
