@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3065cc4b7af4fa34ba773c96fe01ce25, type: 3}
+  m_Name: InfoNote
+  m_EditorClassIdentifier: 
+  itemName: InfoNote
+  itemImage: {fileID: 21300000, guid: 709c9cc5772196949b9b31b4ef5b3e21, type: 3}
+  itemPrefab: {fileID: 1471935057041715923, guid: 0fecc6d4804b0714599857f4d84c9c0d, type: 3}
+  itemType: 2
