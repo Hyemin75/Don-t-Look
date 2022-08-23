@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
             float z = Input.GetAxisRaw("Vertical");
 
             moveSpeed = 5.0f;
+            audioSource.loop = true;
+
             Move(new Vector3(x, 0, z));
 
             if (characterController.velocity.x == 0)
@@ -65,6 +67,7 @@ public class PlayerController : MonoBehaviour
             {
                 Jump();
             }
+
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
@@ -101,7 +104,6 @@ public class PlayerController : MonoBehaviour
     {
         if (characterController.isGrounded == true)
         {
-            PlaySound("JUMP");
             moveDirector.y = jumpForce;
         }
     }

@@ -15,7 +15,8 @@ public class Item : ScriptableObject
         GeneratorHandle, 
         HintNote, 
         InfoNote, 
-        OilBarrel
+        OilBarrel,
+        LeverBody
     }
 
     void Start()
