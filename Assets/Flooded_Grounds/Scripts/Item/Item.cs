@@ -16,7 +16,8 @@ public class Item : ScriptableObject
         HintNote, 
         InfoNote, 
         OilBarrel,
-        LeverBody
+        LeverBody,
+        Car
     }
 
     void Start()

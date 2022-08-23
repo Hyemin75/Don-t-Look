@@ -7,6 +7,7 @@ TagManager:
   - ground
   - CinemachineTarget
   - Item
+  - LeverBody
   layers:
   - Default
   - TransparentFX

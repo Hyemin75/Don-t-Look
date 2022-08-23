@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3065cc4b7af4fa34ba773c96fe01ce25, type: 3}
   m_Name: LeverBody
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: LeverBody
   itemImage: {fileID: 0}
-  itemPrefab: {fileID: 0}
-  itemType: 0
+  itemPrefab: {fileID: 2036857587612875793, guid: 1a5486d1d349f6f41acbdd9d7b9765f9, type: 3}
+  itemType: 4

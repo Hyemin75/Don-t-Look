@@ -9,10 +9,17 @@ public class LeverBody : MonoBehaviour
     [HideInInspector]
     public GateOpen gateOpenEvent = new GateOpen();
 
+    [SerializeField]
+    GameObject ElectricEffect;
+    [SerializeField]
+    GameObject Audio;
+
     AudioSource audioSource;
 
     [SerializeField]
     AudioClip PullLeverSound;
+
+    
 
     private bool isGateOpen = false;
 
@@ -29,6 +36,8 @@ public class LeverBody : MonoBehaviour
 
         if(isGateOpen)
         {
+            ElectricEffect.SetActive(false);
+            Audio.SetActive(false);
             PlaySound("PULLEVER");
         }
     }
