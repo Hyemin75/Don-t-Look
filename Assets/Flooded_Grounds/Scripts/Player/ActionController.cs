@@ -10,6 +10,8 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     LeverBody leverBody;
 
+    [SerializeField]
+    Car car;
 
     [SerializeField]
     private float range;
@@ -59,7 +61,11 @@ public class ActionController : MonoBehaviour
         {
             if(hitInfo.transform.tag == "LeverBody")
             {
-                CanUse();
+                CanUseLever();
+            }
+            else if(hitInfo.transform.tag == "Car")
+            {
+                CanUseCar();
             }
             else
             {
@@ -87,7 +93,15 @@ public class ActionController : MonoBehaviour
         }
     }
 
-    private void CanUse()
+    private void CanUseCar()
+    {
+        if (pickupActivated)
+        {
+            car.ArrivedCar(true);
+        }
+    }
+
+    private void CanUseLever()
     {
         if (pickupActivated)
         {
@@ -112,7 +126,7 @@ public class ActionController : MonoBehaviour
     {
         if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, range, layerMask))
         {
-            if(hitInfo.transform.tag == "Item" || hitInfo.transform.tag == "LeverBody")
+            if(hitInfo.transform.tag == "Item" || hitInfo.transform.tag == "LeverBody" || hitInfo.transform.tag == "Car")
             {
                 ItemInfoAppear();
             }
@@ -126,6 +140,12 @@ public class ActionController : MonoBehaviour
     private void ItemInfoAppear()
     {
         if(hitInfo.transform.tag == "LeverBody")
+        {
+            pickupActivated = true;
+            actionText.gameObject.SetActive(true);
+            actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + "<color=yellow>" + "(E)" + "</color>";
+        }
+        else if(hitInfo.transform.tag == "Car")
         {
             pickupActivated = true;
             actionText.gameObject.SetActive(true);

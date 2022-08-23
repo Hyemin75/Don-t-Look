@@ -6,14 +6,19 @@ public class GameManager : SingletonBehaviour<GameManager>
 { 
     private static GameManager instance;
     private bool IsGameOver;
+    private bool IsGameEnd;
 
-    [SerializeField]
-    HUD hud;
 
     public bool isGameOver
     {
         get => IsGameOver; set => IsGameOver = value; 
     }
+
+    public bool isGameEnd
+    {
+        get => IsGameEnd; set => IsGameEnd = value;
+    }
+
 
     private void Awake()
     { 
@@ -32,13 +37,11 @@ public class GameManager : SingletonBehaviour<GameManager>
             SceneManager.LoadScene(0); // 로드 씬으로 객체들 파괴로 조치 필요
             HUD.Instance.OnGamePlayUI();
         }
-    }
 
-
-    public void EndGame()
-    {
-        isGameOver = true;
-        HUD.Instance.OnGameEndUI();
+        if(IsGameEnd)
+        {
+            HUD.Instance.OnGameEndUI();
+        }
     }
 }
 

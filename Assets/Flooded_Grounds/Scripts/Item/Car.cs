@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class Car : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    public AudioClip CarSound;
+
+    AudioSource audioSource;
+
+    private void Awake()
     {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ArrivedCar(bool arrived)
     {
-        
+        if(arrived)
+        {
+            PlaySound("Car");
+            GameManager.Instance.isGameEnd = true;
+        }
+    }
+
+    void PlaySound(string action)
+    {
+        switch (action)
+        {
+            case "Car":
+                audioSource.clip = CarSound;
+                break;
+        }
+        audioSource.Play();
     }
 }

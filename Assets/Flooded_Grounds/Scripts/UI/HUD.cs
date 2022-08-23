@@ -23,6 +23,8 @@ public class HUD : SingletonBehaviour<HUD>
     GameObject playerCamera;
     [SerializeField]
     GameObject mainSceneCamera;
+    [SerializeField]
+    GameObject EndCamera;
 
 
     private void Start()
@@ -30,10 +32,10 @@ public class HUD : SingletonBehaviour<HUD>
         fadeEffect = GetComponent<FadeEffect>();
         
         playerCamera.SetActive(false);
+        EndCamera.SetActive(false);
         GamePlayUI.SetActive(false);
         GameOverUI.SetActive(false);
         GameEndUI.SetActive(false);
-
 
         OnMainUI();
     }
@@ -65,10 +67,11 @@ public class HUD : SingletonBehaviour<HUD>
 
     public void OnGameEndUI()
     {
+        playerCamera.SetActive(false);
         GamePlayUI.SetActive(false);
-
-        fadeEffect.PlayerFadeOut(darkImage);
+        EndCamera.SetActive(true);
         GameEndUI.SetActive(true);
+        fadeEffect.PlayerFadeOut(darkImage);
     }
 
 
