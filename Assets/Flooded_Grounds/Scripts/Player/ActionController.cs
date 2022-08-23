@@ -55,7 +55,7 @@ public class ActionController : MonoBehaviour
                 Destroy(hitInfo.transform.gameObject);
                 InfoDisappear();
                 inventory.AcquireItem(hitInfo.transform.GetComponent<ItemPickUp>().item);
-
+                PlaySound("GETITEM");
             }
         }
     }
@@ -78,7 +78,6 @@ public class ActionController : MonoBehaviour
 
     private void ItemInfoAppear()
     {
-        Debug.Log("³ªÅ¸³²");
         pickupActivated = true;
         actionText.gameObject.SetActive(true);
         actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + "<color=yellow>" + "(E)" + "</color>";
