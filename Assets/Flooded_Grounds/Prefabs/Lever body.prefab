@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 2036857587612875796}
   - component: {fileID: 2036857587612875795}
   - component: {fileID: 2036857587612875794}
-  m_Layer: 0
+  - component: {fileID: 1347847374}
+  m_Layer: 7
   m_Name: Lever body
-  m_TagString: Untagged
+  m_TagString: LeverBody
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,6 +100,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1347847374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2036857587612875793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f7b56448cda7d488a764b3a1aa53ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 18e846c6e7ab85141bf50aab0478c1b4, type: 2}
 --- !u!1 &2036857587851132192
 GameObject:
   m_ObjectHideFlags: 0
@@ -111,7 +125,7 @@ GameObject:
   - component: {fileID: 2036857587851132195}
   - component: {fileID: 2036857587851132194}
   - component: {fileID: 2036857587851132196}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4984,6 +4998,10 @@ PrefabInstance:
     - target: {fileID: 100234, guid: f4da384b50a3b8f42b5b5315740afb00, type: 3}
       propertyPath: m_Name
       value: Audio
+      objectReference: {fileID: 0}
+    - target: {fileID: 100234, guid: f4da384b50a3b8f42b5b5315740afb00, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 418470, guid: f4da384b50a3b8f42b5b5315740afb00, type: 3}
       propertyPath: m_RootOrder
