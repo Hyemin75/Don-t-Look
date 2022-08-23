@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip walkSound;
     public AudioClip deadInWater;
     public AudioClip scream;
+    public AudioClip jumpSound;
 
     private bool isMoving;
 
@@ -100,6 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         if (characterController.isGrounded == true)
         {
+            PlaySound("JUMP");
             moveDirector.y = jumpForce;
         }
     }
@@ -113,6 +115,9 @@ public class PlayerController : MonoBehaviour
                 break;
             case "RUN":
                 audioSource.clip = runSound;
+                break;
+            case "JUMP":
+                audioSource.clip = jumpSound;
                 break;
             case "DEADINWATER":
                 audioSource.clip = deadInWater;
