@@ -14,18 +14,12 @@ public class LeverBody : MonoBehaviour
     [SerializeField]
     GameObject Audio;
 
-    AudioSource audioSource;
-
-    [SerializeField]
-    AudioClip PullLeverSound;
-
-    
 
     private bool isGateOpen = false;
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+
     }
 
 
@@ -38,18 +32,7 @@ public class LeverBody : MonoBehaviour
         {
             ElectricEffect.SetActive(false);
             Audio.SetActive(false);
-            PlaySound("PULLEVER");
         }
     }
 
-    void PlaySound(string action)
-    {
-        switch (action)
-        {
-          case "PULLLEVER":
-                audioSource.clip = PullLeverSound;
-                break;
-        }
-        audioSource.Play();
-    }
 }

@@ -11,7 +11,6 @@ public class Gate : MonoBehaviour
 
     [SerializeField]
     public AudioClip openSound;
-    public AudioClip PullLeverSound;
 
     AudioSource audioSource;
 

@@ -9,19 +9,41 @@ public class Car : MonoBehaviour
 
     AudioSource audioSource;
 
+    Transform carTransform;
+
+    bool CanMove = false;
+    float speed = 3f;
+    bool carMove = false;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        carTransform = GetComponent<Transform>();
     }
 
-    public void ArrivedCar(bool arrived)
+    private void Update()
     {
-        if(arrived)
+        MoveCar(CanMove);
+
+    }
+
+    public void CanMoveCar(bool arrived)
+    {
+        PlaySound("Car");
+        CanMove = arrived;
+    }
+
+    void MoveCar(bool CanMove)
+    {
+        float Move = Time.deltaTime * speed;
+        if (CanMove)
         {
-            PlaySound("Car");
+            carMove = true;
+            transform.Translate(Vector3.forward * Move);
             GameManager.Instance.isGameEnd = true;
         }
     }
+
 
     void PlaySound(string action)
     {

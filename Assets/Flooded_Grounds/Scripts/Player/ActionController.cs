@@ -61,11 +61,11 @@ public class ActionController : MonoBehaviour
         {
             if(hitInfo.transform.tag == "LeverBody")
             {
-                CanUseLever();
+                UseLever();
             }
             else if(hitInfo.transform.tag == "Car")
             {
-                CanUseCar();
+                UseCar();
             }
             else
             {
@@ -93,15 +93,15 @@ public class ActionController : MonoBehaviour
         }
     }
 
-    private void CanUseCar()
+    private void UseCar()
     {
         if (pickupActivated)
         {
-            car.ArrivedCar(true);
+            car.CanMoveCar(true);
         }
     }
 
-    private void CanUseLever()
+    private void UseLever()
     {
         if (pickupActivated)
         {
