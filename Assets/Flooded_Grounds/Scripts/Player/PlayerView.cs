@@ -1,50 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+using UnityEditor;  // OnDrawGizmos
 
 public class PlayerView : MonoBehaviour
 {
-    public Transform enemy;
-
-    public float angleRange = 45f;
-    public float distance = 5f;
-    public bool isCollision = false;
+    public Transform target;    
+    public float angleRange = 30f;
+    public float radius = 3f;
 
     Color _blue = new Color(0f, 0f, 1f, 0.2f);
     Color _red = new Color(1f, 0f, 0f, 0.2f);
 
-    Vector3 direction;
-    float dotValue = -0f;
+    bool isCollision = false;
 
-    private void Update()
+    void Update()
     {
-        dotValue = Mathf.Cos(Mathf.Deg2Rad * (angleRange/2));
-        direction = enemy.position - transform.position;
+        Vector3 interV = target.position - transform.position;
 
-        if(direction.magnitude < distance)
+        if (interV.magnitude <= radius)
         {
-            if(Vector3.Dot(direction.normalized, transform.transform.forward) > dotValue)
-            {
-               
+            float dot = Vector3.Dot(interV.normalized, transform.forward);
+            float theta = Mathf.Acos(dot);
+            float degree = Mathf.Rad2Deg * theta;
+
+            if (degree <= angleRange / 2f)
                 isCollision = true;
-            }
             else
-            {
                 isCollision = false;
-            }
+            
         }
         else
-        {
             isCollision = false;
-        }
     }
 
     private void OnDrawGizmos()
     {
-        Handles.color = isCollision ? _blue : _red;
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange/2, distance);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, distance);
-    }
+        Handles.color = isCollision ? _red : _blue;
 
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, radius);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, radius);
+    }
 }

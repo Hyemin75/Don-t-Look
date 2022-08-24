@@ -9,6 +9,9 @@ TagManager:
   - Item
   - LeverBody
   - Car
+  - Enemy
+  - Figure
+  - View
   layers:
   - Default
   - TransparentFX
@@ -18,7 +21,7 @@ TagManager:
   - UI
   - Player
   - Item
-  - 
+  - Enemy
   - 
   - 
   - 
