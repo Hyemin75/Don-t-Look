@@ -7,6 +7,8 @@ public class GameManager : SingletonBehaviour<GameManager>
     private static GameManager instance;
     private bool IsGameOver;
     private bool IsGameEnd;
+    [SerializeField]
+    GameObject player;
 
 
     public bool isGameOver
@@ -40,6 +42,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         if(IsGameEnd)
         {
+            player.SetActive(false);
             HUD.Instance.OnGameEndUI();
         }
     }
