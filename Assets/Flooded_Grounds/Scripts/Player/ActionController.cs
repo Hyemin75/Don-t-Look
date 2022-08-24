@@ -116,6 +116,7 @@ public class ActionController : MonoBehaviour
             {
                 PlaySound("FAIL");
                 useText.gameObject.SetActive(true);
+
             }
         }
 
