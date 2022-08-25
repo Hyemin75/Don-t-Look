@@ -2,81 +2,129 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyState
+{
+    None,
+    Stop,
+    Move,
+    Attack
+}
+
 public class Enemy : MonoBehaviour
 {
-    //기본 비활성화 상태 + 태그 figure
-    //활성화 된 적 or 플레이어의 콜라이더와 부딪히면 활성화 태그 변경 figure -> enemy   
-    
-    public GameObject ActiveCollider;
+    public EnemyState state;
+    public EnemyState prevState = EnemyState.None;
 
-    bool isActive = false; // 활성화 판단
-    bool CanMove = false; // 플레이어가 쳐다보는지 판단
-    bool isClose = false;
+    Animator animator;
 
-    [SerializeField]
-    GameObject Player;
+    Vector3 targetPos;
+    float moveSpeed = 7f;
 
-    Vector3 distance;
+    public GameObject target;
+    bool isFindEnemy = false;
+    Plane[] eyePlanes;
+    Camera eye;
+
+    GameObject awakeCollider;
+    GameObject attackCollider;
 
 
+    private void Awake()
+    {
+    }
+
+
+    private void Start()
+    {        
+        attackCollider.SetActive(false);
+        awakeCollider.SetActive(false);
+
+        ChangeState(EnemyState.None);
+    }
 
     private void Update()
     {
-        distance = gameObject.transform.position - Player.transform.position;
-        //활성화 상태인지
-        if(isActive)
+        switch (state)
         {
-            EnemyMove();
+            case EnemyState.None: UpdateNone(); break;
+            case EnemyState.Stop: UpdateStop(); break;
+
+
         }
     }
 
-    //비활성화 -> 활성화 + 태그 변경
-    private void OnTriggerEnter(Collider other)
+    void UpdateNone()
     {
-        Debug.Log("ld");
-        if(other.tag == "View" || other.tag == "Enemy")
+        if (IsFindEnemy())
         {
-            isActive = true;
+            ChangeState(EnemyState.Stop);
         }
     }
 
-    //테그 변경과 이동 메소드
-    void EnemyMove()
+    void UpdateStop()
     {
-        if(IsInPlayerView())
+        //플레이어가 쳐다보는지
+        //if(CanMove())
+        //{
+        //    ChangeState(EnemyState.Move);
+        //}
+
+    }
+    
+    void UpdateMove()
+    {
+        //if(!CanMove())
+        //{
+        //    ChangeState(EnemyState.Stop);
+        //}
+    }
+
+    void UpdateAttack()
+    {
+
+    }
+
+    void ChangeState(EnemyState nextState)
+    {
+        if (prevState == nextState) return;
+
+        StopAllCoroutines();
+
+        prevState = state;
+        state = nextState;
+
+        animator.SetBool("IsNone", false);
+        animator.SetBool("IsAttack", false);
+
+        switch(state)
         {
-            gameObject.tag = "Enemy";
-            EnemyMovement();
+            case EnemyState.None: StartCoroutine(CoroutineNone()); break;
         }
-        else
+
+    }
+
+
+    IEnumerator CoroutineNone()
+    {
+        animator.SetBool("isNone", true);
+
+        while (true)
         {
-            gameObject.tag = "Figure";
+            yield return new WaitForSeconds(2f);
+            yield break;
         }
+
     }
-
-    //bool IsClose()
-    //{
-    //    //if(distance <= 80f)
-    //    //{
-    //    //
-    //    //}
-    //    //return isClose;
-    //}
-    //
-
-    //플레이어 시야와 충돌 했는지 판별하는 메소드
-    bool IsInPlayerView()
+    IEnumerator CoroutineAttack()
     {
-        //
+        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
+        animator.SetTrigger("isAttack");
 
-        return CanMove;
+        yield return new WaitForSeconds(1f);
+        ChangeState(EnemyState.Attack);
+        yield break;
     }
 
-    //적 움직임
-    void EnemyMovement()
-    {
-      //  if()
-    }
 
 
 
@@ -85,7 +133,16 @@ public class Enemy : MonoBehaviour
     //플레이어와의 거리가 충분히 좁혀졌을 땐 보지 않을 때 7의 속력으로 다가옴
     //플레이어가 볼 때 비활성화
 
+    bool IsFindEnemy()
+    {
+        if(!target.activeSelf) return false;
 
+        Bounds targetBounds = target.GetComponentInChildren<MeshRenderer>().bounds;
+        eyePlanes = GeometryUtility.CalculateFrustumPlanes(eye);
+        isFindEnemy = GeometryUtility.TestPlanesAABB(eyePlanes, targetBounds);
+
+        return isFindEnemy; 
+    }
 
 
 }
