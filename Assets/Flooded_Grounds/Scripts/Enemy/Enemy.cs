@@ -25,19 +25,40 @@ public class Enemy : MonoBehaviour
     Plane[] eyePlanes;
     Camera eye;
 
-    GameObject awakeCollider;
-    GameObject attackCollider;
+    Collider[] Colliders;
 
+    GameObject shpareCollider;
+    GameObject attackCollider;
 
     private void Awake()
     {
+        Colliders = gameObject.GetComponentsInChildren<Collider>();
     }
 
 
     private void Start()
     {        
+       SphereCollider[] sphereColliders = GetComponentsInChildren<SphereCollider>();
+        foreach(var sphereCollider in Colliders)
+        {
+            if (sphereCollider.name == "SphereCollider")
+            {
+                shpareCollider = sphereCollider.gameObject;
+                break;
+            }
+        }
+        shpareCollider.SetActive(false);
+
+        BoxCollider[] boxColliders = GetComponentsInChildren<BoxCollider>();
+        foreach (var boxCollider in Colliders)
+        {
+            if (boxCollider.name == "AttackCollider")
+            {
+                attackCollider = boxCollider.gameObject;
+                break;
+            }
+        }
         attackCollider.SetActive(false);
-        awakeCollider.SetActive(false);
 
         ChangeState(EnemyState.None);
     }
@@ -48,8 +69,8 @@ public class Enemy : MonoBehaviour
         {
             case EnemyState.None: UpdateNone(); break;
             case EnemyState.Stop: UpdateStop(); break;
-
-
+            case EnemyState.Move: UpdateMove(); break;
+            case EnemyState.Attack: UpdateAttack(); break;
         }
     }
 
@@ -129,8 +150,8 @@ public class Enemy : MonoBehaviour
 
 
     //플레이어가 쳐다볼땐 플레이어를 죽이지 x => 플레이어가 보면서 부딪히면 죽지 x  
-    //플레이어가 보지 않을 때 0.5초마다 플레이어 방향으로 플레이어와 거리의  1/8 만큼 다가옴
-    //플레이어와의 거리가 충분히 좁혀졌을 땐 보지 않을 때 7의 속력으로 다가옴
+    //플레이어가 보지 않을 때 1초마다 플레이어 방향으로 플레이어와 거리의  1/8 만큼 다가옴
+    //플레이어와의 거리가 100 이하일 때 7의 속력으로 다가옴
     //플레이어가 볼 때 비활성화
 
     bool IsFindEnemy()

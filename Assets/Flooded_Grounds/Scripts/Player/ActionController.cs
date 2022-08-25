@@ -125,7 +125,7 @@ public class ActionController : MonoBehaviour
 
     private void CheckItem()
     {
-        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hitInfo, range, layerMask))
+        if(Physics.Raycast(transform.position, transform.forward, out hitInfo, range, layerMask))
         {
             if(hitInfo.transform.tag == "Item" || hitInfo.transform.tag == "LeverBody" || hitInfo.transform.tag == "Car")
             {
