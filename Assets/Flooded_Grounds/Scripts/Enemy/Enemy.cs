@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum EnemyState
 {
@@ -15,56 +16,37 @@ public class Enemy : MonoBehaviour
     public EnemyState state;
     public EnemyState prevState = EnemyState.None;
 
-    Animator animator;
-
-    Vector3 targetPos;
-    float moveSpeed = 7f;
+    NavMeshAgent agent;
 
     public GameObject target;
+    Vector3 targetPos;
+
     bool isFindEnemy = false;
-    Plane[] eyePlanes;
-    Camera eye;
 
-    Collider[] Colliders;
+    bool isPlayerSeeing = false;
 
-    GameObject shpareCollider;
-    GameObject attackCollider;
+    [SerializeField]
+    AudioClip lookingSound;
+    AudioClip moveSound;
+    AudioClip stopSound;
+
+    AudioSource audioSource;
 
     private void Awake()
     {
-        Colliders = gameObject.GetComponentsInChildren<Collider>();
+        audioSource = GetComponent<AudioSource>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
 
     private void Start()
-    {        
-       SphereCollider[] sphereColliders = GetComponentsInChildren<SphereCollider>();
-        foreach(var sphereCollider in Colliders)
-        {
-            if (sphereCollider.name == "SphereCollider")
-            {
-                shpareCollider = sphereCollider.gameObject;
-                break;
-            }
-        }
-        shpareCollider.SetActive(false);
-
-        BoxCollider[] boxColliders = GetComponentsInChildren<BoxCollider>();
-        foreach (var boxCollider in Colliders)
-        {
-            if (boxCollider.name == "AttackCollider")
-            {
-                attackCollider = boxCollider.gameObject;
-                break;
-            }
-        }
-        attackCollider.SetActive(false);
-
+    {               
         ChangeState(EnemyState.None);
     }
 
     private void Update()
     {
+
         switch (state)
         {
             case EnemyState.None: UpdateNone(); break;
@@ -76,7 +58,7 @@ public class Enemy : MonoBehaviour
 
     void UpdateNone()
     {
-        if (IsFindEnemy())
+        if (isFindEnemy)
         {
             ChangeState(EnemyState.Stop);
         }
@@ -84,24 +66,50 @@ public class Enemy : MonoBehaviour
 
     void UpdateStop()
     {
-        //플레이어가 쳐다보는지
-        //if(CanMove())
-        //{
-        //    ChangeState(EnemyState.Move);
-        //}
+        agent.Stop();
+        transform.GetChild(0).gameObject.tag = "Figure";
+        
+        //한번만 재생하는지 체크
+        PlaySound("STOP");
 
+        //플레이어가 쳐다보는지
+        if (!isPlayerSeeing)
+        {
+            ChangeState(EnemyState.Move);
+        }
     }
     
     void UpdateMove()
     {
-        //if(!CanMove())
-        //{
-        //    ChangeState(EnemyState.Stop);
-        //}
+        
+        if(!isPlayerSeeing)
+        { 
+            transform.GetChild(0).gameObject.tag = "Enemy";
+            PlaySound("MOVETOENEMY");
+            //거리가 멀면 속도 20f, 거리가 가까우면 7f
+            if(Vector3.Distance(target.transform.position, gameObject.transform.position) > 100f)
+            {
+                agent.speed = 20f;
+            }
+            else
+            {
+                agent.speed = 8.5f;
+            }
+            agent.SetDestination(target.transform.position);
+        }
+        else
+        {
+            ChangeState(EnemyState.Stop);
+        }
+
+        //transform.GetChild(0).gameObject의 콜라이더에 player 닿으면 웃음소리 재생 
+        
     }
 
     void UpdateAttack()
     {
+        
+        //소리 멈춤
 
     }
 
@@ -113,57 +121,33 @@ public class Enemy : MonoBehaviour
 
         prevState = state;
         state = nextState;
+    }
 
-        animator.SetBool("IsNone", false);
-        animator.SetBool("IsAttack", false);
-
-        switch(state)
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Figure" || other.tag == "Player")
         {
-            case EnemyState.None: StartCoroutine(CoroutineNone()); break;
+            isFindEnemy = true;
+            transform.LookAt(targetPos);
+            PlaySound("LOOKENEMY");
+            
+            ChangeState(EnemyState.Stop);
         }
-
     }
-
-
-    IEnumerator CoroutineNone()
+    void PlaySound(string action)
     {
-        animator.SetBool("isNone", true);
-
-        while (true)
+        switch (action)
         {
-            yield return new WaitForSeconds(2f);
-            yield break;
+            case "LOOKENMMY":
+                audioSource.clip = lookingSound;
+                break;
+            case "MOVETOENEMY":
+                audioSource.clip = moveSound;
+                break;
+            case "STOP":
+                audioSource.clip = stopSound;
+                break;
         }
-
+        audioSource.Play();
     }
-    IEnumerator CoroutineAttack()
-    {
-        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
-        animator.SetTrigger("isAttack");
-
-        yield return new WaitForSeconds(1f);
-        ChangeState(EnemyState.Attack);
-        yield break;
-    }
-
-
-
-
-    //플레이어가 쳐다볼땐 플레이어를 죽이지 x => 플레이어가 보면서 부딪히면 죽지 x  
-    //플레이어가 보지 않을 때 1초마다 플레이어 방향으로 플레이어와 거리의  1/8 만큼 다가옴
-    //플레이어와의 거리가 100 이하일 때 7의 속력으로 다가옴
-    //플레이어가 볼 때 비활성화
-
-    bool IsFindEnemy()
-    {
-        if(!target.activeSelf) return false;
-
-        Bounds targetBounds = target.GetComponentInChildren<MeshRenderer>().bounds;
-        eyePlanes = GeometryUtility.CalculateFrustumPlanes(eye);
-        isFindEnemy = GeometryUtility.TestPlanesAABB(eyePlanes, targetBounds);
-
-        return isFindEnemy; 
-    }
-
-
 }
