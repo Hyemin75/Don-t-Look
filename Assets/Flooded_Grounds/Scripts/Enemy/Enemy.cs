@@ -27,15 +27,17 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     AudioClip lookingSound;
+    [SerializeField]
     AudioClip moveSound;
-    AudioClip stopSound;
 
+
+    [SerializeField]
     AudioSource audioSource;
+    
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
-        agent = GetComponent<NavMeshAgent>();
+        agent = gameObject.GetComponent<NavMeshAgent>();
     }
 
 
@@ -60,18 +62,17 @@ public class Enemy : MonoBehaviour
     {
         if (isFindEnemy)
         {
+            PlaySound("LOOKENEMY");
             ChangeState(EnemyState.Stop);
         }
     }
 
+
     void UpdateStop()
     {
-        agent.Stop();
+        //agent.Stop();
         transform.GetChild(0).gameObject.tag = "Figure";
         
-        //한번만 재생하는지 체크
-        PlaySound("STOP");
-
         //플레이어가 쳐다보는지
         if (!isPlayerSeeing)
         {
@@ -85,7 +86,7 @@ public class Enemy : MonoBehaviour
         if(!isPlayerSeeing)
         { 
             transform.GetChild(0).gameObject.tag = "Enemy";
-            PlaySound("MOVETOENEMY");
+
             //거리가 멀면 속도 20f, 거리가 가까우면 7f
             if(Vector3.Distance(target.transform.position, gameObject.transform.position) > 100f)
             {
@@ -121,19 +122,84 @@ public class Enemy : MonoBehaviour
 
         prevState = state;
         state = nextState;
+
+        switch (state)
+        {
+            case EnemyState.None: StartCoroutine(CoroutineNone()); break;
+            case EnemyState.Stop: StartCoroutine(CoroutineStop()); break;
+            case EnemyState.Move: StartCoroutine(CoroutineMove()); break;
+            case EnemyState.Attack: StartCoroutine(CoroutineAttack()); break;
+        }
     }
+
+    #region CoroutineDetail
+    IEnumerator CoroutineNone()
+    {
+        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
+        Debug.Log("대기 상태 시작");
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            
+            yield break;
+        }
+    }
+    IEnumerator CoroutineStop()
+    {
+        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
+        Debug.Log("멈춰있음");
+
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            // 시간마다 수행해야 하는 동작 (상태가 바뀔 때 마다)
+        }
+    }
+    IEnumerator CoroutineMove()
+    {
+        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
+        Debug.Log("추적 상태 시작");
+        audioSource.loop = true;
+        PlaySound("MOVETOENEMY");
+
+        targetPos = target.transform.position;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(5f);
+            // 시간마다 수행해야 하는 동작 (상태가 바뀔 때 마다)
+
+        }
+    }
+    IEnumerator CoroutineAttack()
+    {
+        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
+        yield return new WaitForSeconds(1f);
+        ChangeState(EnemyState.None);
+        yield break;
+    }
+    #endregion
+
+
+
+
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Figure" || other.tag == "Player")
+        if (!isFindEnemy)
         {
-            isFindEnemy = true;
-            transform.LookAt(targetPos);
-            PlaySound("LOOKENEMY");
-            
-            ChangeState(EnemyState.Stop);
+            if (other.tag == "Figure" || other.tag == "Player")
+            {
+                isFindEnemy = true;
+                transform.LookAt(target.transform.position);
+            }
         }
     }
+
+
+
+
+
     void PlaySound(string action)
     {
         switch (action)
@@ -143,9 +209,6 @@ public class Enemy : MonoBehaviour
                 break;
             case "MOVETOENEMY":
                 audioSource.clip = moveSound;
-                break;
-            case "STOP":
-                audioSource.clip = stopSound;
                 break;
         }
         audioSource.Play();
