@@ -26,7 +26,7 @@ public class FadeEffect : MonoBehaviour
             time += Time.deltaTime / animTime;
 
             Color color = fadeImage.color;
-            color.a = Mathf.Lerp(start, end, time);
+            color.a = Mathf.Lerp(end, start, time);
 
             fadeImage.color = color;
         }

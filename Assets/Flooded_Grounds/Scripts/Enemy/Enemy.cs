@@ -55,7 +55,6 @@ public class Enemy : MonoBehaviour
             case EnemyState.None: UpdateNone(); break;
             case EnemyState.Stop: UpdateStop(); break;
             case EnemyState.Move: UpdateMove(); break;
-            case EnemyState.Attack: UpdateAttack(); break;
         }
     }
 
@@ -98,18 +97,6 @@ public class Enemy : MonoBehaviour
             navMeshAgent.speed = 8.5f;
         }
         navMeshAgent.SetDestination(target.transform.position);
-        
-        //if (!isPlayerSeeing)
-        //{ 
-        //    transform.GetChild(0).gameObject.tag = "Enemy";
-
-        //    //성능에 안좋음
-            
-        //}
-        //else if(isPlayerSeeing)
-        //{
-        //    ChangeState(EnemyState.Stop);
-        //}
 
         //transform.GetChild(0).gameObject의 콜라이더에 player 닿으면 웃음소리 재생 
         
@@ -124,11 +111,9 @@ public class Enemy : MonoBehaviour
 
     void ChangeState(EnemyState nextState)
     {
-        Debug.Log("체인지 함수 들어옴");
 
         if (state == nextState)
             return;
-        Debug.Log("리턴 안됨");
 
         StopAllCoroutines();
 
@@ -137,10 +122,8 @@ public class Enemy : MonoBehaviour
 
         switch (state)
         {
-            case EnemyState.None: StartCoroutine(CoroutineNone()); break;
-            case EnemyState.Stop:
-
-                StartCoroutine(CoroutineStop()); break;
+            case EnemyState.None: break;
+            case EnemyState.Stop: break;
             case EnemyState.Move:
                 Debug.Log("추적 상태 시작");
                 audioSource.loop = true;
@@ -149,54 +132,11 @@ public class Enemy : MonoBehaviour
 
                 navMeshAgent.enabled = true;
                 navMeshAgent.speed = 20f;
-                //StartCoroutine(CoroutineMove()); break;
                 break;
-            case EnemyState.Attack: StartCoroutine(CoroutineAttack()); break;
         }
 
     }
 
-    #region CoroutineDetail
-    IEnumerator CoroutineNone()
-    {
-        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
-        Debug.Log("대기 상태 시작");
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-            
-            yield break;
-        }
-    }
-    IEnumerator CoroutineStop()
-    {
-        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
-        Debug.Log("멈춰있음");
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-            // 시간마다 수행해야 하는 동작 (상태가 바뀔 때 마다)
-        }
-    }
-    IEnumerator CoroutineMove()
-    {
-        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
-       
-
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-            // 시간마다 수행해야 하는 동작 (상태가 바뀔 때 마다)
-        }
-    }
-    IEnumerator CoroutineAttack()
-    {
-        // 한번만 수행해야 하는 동작 (상태가 바뀔 때 마다)
-        yield return new WaitForSeconds(1f);
-        ChangeState(EnemyState.None);
-        yield break;
-    }
-    #endregion
 
     private void OnTriggerEnter(Collider other)
     {

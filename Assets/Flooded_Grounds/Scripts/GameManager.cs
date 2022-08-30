@@ -5,11 +5,17 @@ using UnityEngine.UI;
 public class GameManager : SingletonBehaviour<GameManager>
 { 
     private static GameManager instance;
+    private static bool IsGameStart;
     private bool IsGameOver;
     private bool IsGameEnd;
+
     [SerializeField]
     GameObject player;
 
+    public bool isGameStart
+    {
+        get => IsGameStart; set => IsGameStart = value;
+    }
 
     public bool isGameOver
     {
@@ -25,17 +31,28 @@ public class GameManager : SingletonBehaviour<GameManager>
     private void Awake()
     { 
         IsGameOver = false;
+        IsGameEnd = false;
+        IsGameStart = false;
+       
+        //HUD.Instance.OnGamePlayUI();
     }
 
     private void Update()
     {
-        if(IsGameOver == true)
+
+        if(IsGameStart )
+        {
+            HUD.Instance.OnGamePlayUI();
+        }
+
+        if(IsGameOver)
         {
             HUD.Instance.OnGameOverUI();
         }
         
         if (Input.GetKeyDown(KeyCode.R) && isGameOver)
         {
+            IsGameOver = false;
             SceneManager.LoadScene(0); // 로드 씬으로 객체들 파괴로 조치 필요
             HUD.Instance.OnGamePlayUI();
         }
@@ -46,5 +63,6 @@ public class GameManager : SingletonBehaviour<GameManager>
             HUD.Instance.OnGameEndUI();
         }
     }
+
 }
 

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class FlashLight : MonoBehaviour
 {
-    [SerializeField]
-    GameObject Flashlight;
+    Light Flashlight;
 
     private bool isActive = false;
     AudioSource audioSource;
 
     private void Awake()
     {
+        Flashlight = gameObject.GetComponentInChildren<Light>();
         audioSource = GetComponent<AudioSource>();
     }
 

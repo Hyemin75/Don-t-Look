@@ -9,8 +9,8 @@ public class ButtonController : MonoBehaviour
     
     public void PushStartButton()
     {
+        GameManager.Instance.isGameStart = true;
         HUD.Instance.OnGamePlayUI();
-        Destroy(MainSceneAngel);   
     }
 
     public void AppExit()

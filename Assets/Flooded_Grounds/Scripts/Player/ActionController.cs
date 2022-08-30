@@ -22,9 +22,7 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     private LayerMask layerMask;
 
-    [SerializeField]
     private TextMeshProUGUI actionText;
-    [SerializeField]
     private TextMeshProUGUI useText;
 
     [SerializeField]
@@ -43,7 +41,14 @@ public class ActionController : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        actionText.gameObject.SetActive(false);
+
+        GameObject ActionText = GameObject.Find("ActionText");
+        actionText = ActionText.GetComponent<TextMeshProUGUI>();
+
+        GameObject UseText = GameObject.Find("UseText");
+        useText = UseText.GetComponent<TextMeshProUGUI>();
+
+        actionText.gameObject.SetActive(false); // gameobhect.find 로 캔버스 찾기
         useText.gameObject.SetActive(false);
     }
 

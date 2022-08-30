@@ -49,12 +49,15 @@ public class HUD : SingletonBehaviour<HUD>
 
     public void OnGamePlayUI()
     {
-        // FadeOn - update or corutien 사용 필요
+        GameOverUI.SetActive(false);
+        fadeEffect.PlayerFadeIn(darkImage);
+        
         mainSceneCamera.SetActive(false);
         MainUI.SetActive(false);
 
         GamePlayUI.SetActive(true);
         playerCamera.SetActive(true);
+
     }
 
     public void OnGameOverUI()
