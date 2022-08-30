@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3065cc4b7af4fa34ba773c96fe01ce25, type: 3}
   m_Name: FlashLight
   m_EditorClassIdentifier: 
-  itemName: 
+  itemName: FlashLight
   itemImage: {fileID: 0}
-  itemPrefab: {fileID: 0}
-  itemType: 0
+  itemPrefab: {fileID: 1147965471979518, guid: 0ddea81a21def2441b61569e0a44ca14, type: 3}
+  itemType: 5

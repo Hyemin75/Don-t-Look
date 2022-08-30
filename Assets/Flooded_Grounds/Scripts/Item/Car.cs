@@ -13,7 +13,6 @@ public class Car : MonoBehaviour
 
     bool CanMove = false;
     float speed = 3f;
-    bool carMove = false;
 
     private void Awake()
     {
@@ -38,7 +37,6 @@ public class Car : MonoBehaviour
         float Move = Time.deltaTime * speed;
         if (CanMove)
         {
-            carMove = true;
             transform.Translate(Vector3.forward * Move);
             GameManager.Instance.isGameEnd = true;
         }

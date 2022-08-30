@@ -34,6 +34,7 @@ public class PlayerView : MonoBehaviour
             isCollision = false;
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Handles.color = isCollision ? _red : _blue;
@@ -41,4 +42,6 @@ public class PlayerView : MonoBehaviour
         Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, radius);
         Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, radius);
     }
+#endif
+
 }
