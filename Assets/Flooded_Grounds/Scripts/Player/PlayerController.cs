@@ -125,27 +125,8 @@ public class PlayerController : MonoBehaviour
             case "DEADINWATER":
                 audioSource.clip = deadInWater;
                 break;
-            case "SCREAM":
-                audioSource.clip = scream;
-                break;
-
         }
         audioSource.Play();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Enemy")
-        {
-            Die();
-        }
-    }
-
-    public void Die()
-    {
-        IsDead = true;
-        PlaySound("SCREAM");
-        GameManager.Instance.isGameOver = true;
     }
 
     public void DeadInWater()

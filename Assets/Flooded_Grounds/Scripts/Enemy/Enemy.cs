@@ -18,27 +18,31 @@ public class Enemy : MonoBehaviour
 
     public GameObject target;
     Vector3 targetPos;
+    Collider targetCollider;
 
     bool isFindEnemy = false;
 
-    bool isPlayerSeeing;
-
     NavMeshAgent navMeshAgent;
+    SphereCollider sphereCollider;
 
     [SerializeField]
     AudioClip lookingSound;
     [SerializeField]
     AudioClip moveSound;
-
     [SerializeField]
+    AudioClip screamSound;
+
     AudioSource audioSource;
 
-    [SerializeField]
-    IsSeeing isSeeing;
+    bool isPlayerSeeing = false;
+    MeshRenderer meshRenderer;
 
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        sphereCollider = gameObject.GetComponent<SphereCollider>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
 
@@ -49,7 +53,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-
         switch (state)
         {
             case EnemyState.None: UpdateNone(); break;
@@ -70,7 +73,6 @@ public class Enemy : MonoBehaviour
 
     void UpdateStop()
     {
-        isPlayerSeeing = isSeeing.isPlayerSeeing;
         transform.GetChild(0).gameObject.tag = "Figure";
         navMeshAgent.enabled = false;
 
@@ -83,7 +85,7 @@ public class Enemy : MonoBehaviour
     
     void UpdateMove()
     {
-        if (isSeeing.isPlayerSeeing)
+        if (isPlayerSeeing)
         {
             audioSource.Stop();
             ChangeState(EnemyState.Stop);
@@ -97,7 +99,6 @@ public class Enemy : MonoBehaviour
             navMeshAgent.speed = 8.5f;
         }
         navMeshAgent.SetDestination(target.transform.position);
-
         //transform.GetChild(0).gameObjectÀÇ ÄÝ¶óÀÌ´õ¿¡ player ´êÀ¸¸é ¿ôÀ½¼Ò¸® Àç»ý 
         
     }
@@ -140,12 +141,17 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!isFindEnemy)
+        if(isFindEnemy && other.tag == "Player" && state == EnemyState.Move)
+        {
+            GameManager.Instance.isGameOver = true;
+        }
+        else if (!isFindEnemy)
         {
             if (other.tag == "Figure" || other.tag == "Player")
             {
                 isFindEnemy = true;
                 transform.LookAt(target.transform.position);
+                sphereCollider.radius = 0.6f;
             }
         }
     }
@@ -161,7 +167,24 @@ public class Enemy : MonoBehaviour
             case "MOVETOENEMY":
                 audioSource.clip = moveSound;
                 break;
+            case "SCREAM":
+                audioSource.clip = screamSound;
+                break;
         }
         audioSource.Play();
     }
+
+
+    private void OnBecameInvisible()
+    {
+        Debug.Log("¾Èº½");
+        isPlayerSeeing = false;
+    }
+
+    private void OnBecameVisible()
+    {
+        Debug.Log("º½");
+        isPlayerSeeing = true;
+    }
+
 }
