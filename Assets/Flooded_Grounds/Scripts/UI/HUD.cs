@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HUD : SingletonBehaviour<HUD>
+public class HUD : MonoBehaviour
 {
     [SerializeField]
     Image darkImage;
@@ -26,9 +26,22 @@ public class HUD : SingletonBehaviour<HUD>
     [SerializeField]
     GameObject EndCamera;
 
+    GameObject MainSceneAngel;
+
+    private void Awake()
+    {
+        MainSceneAngel = GameObject.Find("MainSceneAngel");
+    
+    }
 
     private void Start()
     {
+        if(GameManager.Instance.isGameRestart == true)
+        {
+            OnGamePlayUI();
+            return;
+        }
+        
         fadeEffect = GetComponent<FadeEffect>();
         
         playerCamera.SetActive(false);
@@ -50,10 +63,11 @@ public class HUD : SingletonBehaviour<HUD>
     public void OnGamePlayUI()
     {
         GameOverUI.SetActive(false);
-        fadeEffect.PlayerFadeIn(darkImage);
         
         mainSceneCamera.SetActive(false);
         MainUI.SetActive(false);
+        
+        //fadeEffect.PlayerFadeIn(darkImage);
 
         GamePlayUI.SetActive(true);
         playerCamera.SetActive(true);
@@ -77,5 +91,16 @@ public class HUD : SingletonBehaviour<HUD>
         fadeEffect.PlayerFadeOut(darkImage);
     }
 
+
+    public void PushStartButton()
+    {
+        GameManager.Instance.isGameRestart = true;
+        OnGamePlayUI();
+    }
+
+    public void AppExit()
+    {
+        Application.Quit();
+    }
 
 }
