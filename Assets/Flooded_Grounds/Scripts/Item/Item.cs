@@ -17,6 +17,7 @@ public class Item : ScriptableObject
         InfoNote, 
         OilBarrel,
         LeverBody,
+        FlashLight,
         Car
     }
 
