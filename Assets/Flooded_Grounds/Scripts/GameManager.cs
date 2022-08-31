@@ -42,8 +42,9 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void Update()
     {
+        Cursor.visible = false;
 
-        if(IsGameRestart)
+        if (IsGameRestart)
         {
             HUD.OnGamePlayUI();
         }

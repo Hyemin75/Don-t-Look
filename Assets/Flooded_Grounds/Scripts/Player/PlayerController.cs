@@ -171,18 +171,18 @@ public class PlayerController : MonoBehaviour
                 audioSource.Stop();
                 break;
             case PlayerState.Walk:
-                moveSpeed = 5.0f;
                 audioSource.loop = true;
+                moveSpeed = 5.0f;
                 PlaySound("WALK"); 
                 break;
             case PlayerState.Run:
-                moveSpeed = runSpeed;
                 audioSource.loop = true;
+                moveSpeed = runSpeed;
                 PlaySound("RUN");
                 break;
             case PlayerState.Jump:
-                PlaySound("JUMP");
                 audioSource.loop = false;
+                PlaySound("JUMP");
                 break;
             case PlayerState.Dead:
                 PlaySound("DEADINWATER"); break;
