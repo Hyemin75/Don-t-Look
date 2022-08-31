@@ -73,9 +73,9 @@ public class StaminaBar : MonoBehaviour
     {
         if (stamina <= 0)
         {
-            if (playerController.moveSpeed >= 10f)
+            if (playerController.moveSpeed == playerController.runSpeed)
             {
-                playerController.runSpeed = 5f;
+                playerController.moveSpeed = 5f;
                 playerController.PlaySound("WALK");
                 
             }

@@ -1,9 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum PlayerState
+{
+    Stand,
+    Walk,
+    Run,
+    Jump,
+    Dead
+}
 
 public class PlayerController : MonoBehaviour
 {
+
+    public PlayerState state;
+    public PlayerState prevState = PlayerState.Stand;
 
     [SerializeField]
     public float moveSpeed;
@@ -40,72 +51,139 @@ public class PlayerController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    private void Start()
+    {
+        ChangeState(PlayerState.Stand);
+    }
+
     private void Update()
     {
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
+
+        MoveCameraDirection(new Vector3(x, 0, z));
+        characterController.Move(moveDirector * moveSpeed * Time.deltaTime);
+
+        if (characterController.isGrounded == false)
+        {
+            moveDirector.y += gravity * Time.deltaTime;
+        }
+
+        switch (state)
+        {
+            case PlayerState.Stand: UpdateStand(); break;
+            case PlayerState.Walk: UpdateWalk(); break;
+            case PlayerState.Run: UpdateRun(); break;
+            case PlayerState.Jump: UpdateJump(); break;
+            case PlayerState.Dead: UpdateDead(); break;
+        }
 
         if (transform.position.y <= WaterHeight)
         {
-            DeadInWater();
-        }
-
-        if (!IsDead)
-        {
-            float x = Input.GetAxisRaw("Horizontal");
-            float z = Input.GetAxisRaw("Vertical");
-
-            moveSpeed = 5.0f;
-            audioSource.loop = true;
-
-            Move(new Vector3(x, 0, z));
-
-            if (characterController.velocity.x == 0)
-            {
-                PlaySound("WALK");
-            }
-
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Jump();
-            }
-
-
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                moveSpeed = runSpeed;
-            }
-            if (Input.GetKeyDown(KeyCode.LeftShift))
-            {
-                PlaySound("RUN");
-            }
-
-            if (Input.GetKeyUp(KeyCode.LeftShift))
-            {
-                PlaySound("WALK");
-            }
-
-            if (characterController.isGrounded == false)
-            {
-                moveDirector.y += gravity * Time.deltaTime;
-            }
-            characterController.Move(moveDirector * moveSpeed * Time.deltaTime);
-
-            float mouseX = Input.GetAxis("Mouse X");
-            float mouseY = Input.GetAxis("Mouse Y");
+            ChangeState(PlayerState.Dead);
         }
     }
 
-    public void Move(Vector3 direction)
+
+    public void MoveCameraDirection(Vector3 direction)
     {
-         Vector3 movedis = cameraTransform.rotation * direction;
+        Vector3 movedis = cameraTransform.rotation * direction;
         moveDirector = new Vector3(movedis.x, moveDirector.y, movedis.z);
     }
 
-    public void Jump()
+    void UpdateStand()
     {
-        if (characterController.isGrounded == true)
+        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W))
         {
-            moveDirector.y = jumpForce;
+            ChangeState(PlayerState.Walk);
+        }
+        if(Input.GetKey(KeyCode.Space) && characterController.isGrounded == true)
+        {
+            ChangeState(PlayerState.Jump);
+        }
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            ChangeState(PlayerState.Run);
+        }
+    }
+
+    void UpdateWalk()
+    {
+        if(characterController.velocity.x == 0)
+        {
+            ChangeState(PlayerState.Stand);
+        }
+        if (Input.GetKeyDown(KeyCode.Space) 
+            || characterController.isGrounded == true)
+        {
+            ChangeState(PlayerState.Jump);
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            ChangeState(PlayerState.Run);
+        }
+    }
+
+    void UpdateJump()
+    {
+        moveDirector.y = jumpForce;
+
+        if (characterController.isGrounded == true && Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            ChangeState(PlayerState.Run);
+        }
+        else
+        {
+            ChangeState(PlayerState.Run);
+        }
+    }
+
+    void UpdateRun()
+    {
+        if(Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            ChangeState(PlayerState.Walk);
+        }
+        if(Input.GetKeyUp(KeyCode.Space) && characterController.isGrounded == true)
+        {
+            ChangeState(PlayerState.Jump);
+        }
+    }
+
+    void UpdateDead()
+    { 
+        IsDead = true;
+        GameManager.Instance.isGameOver = true;
+    }
+
+    void ChangeState(PlayerState nextState)
+    {
+        if (state == nextState) return;
+
+        prevState = state;
+        state = nextState;
+
+        switch (state)
+        {
+            case PlayerState.Stand:
+                audioSource.Stop();
+                break;
+            case PlayerState.Walk:
+                moveSpeed = 5.0f;
+                audioSource.loop = true;
+                PlaySound("WALK"); 
+                break;
+            case PlayerState.Run:
+                moveSpeed = runSpeed;
+                audioSource.loop = true;
+                PlaySound("RUN");
+                break;
+            case PlayerState.Jump:
+                PlaySound("JUMP");
+                audioSource.loop = false;
+                break;
+            case PlayerState.Dead:
+                PlaySound("DEADINWATER"); break;
         }
     }
 
@@ -128,15 +206,6 @@ public class PlayerController : MonoBehaviour
         }
         audioSource.Play();
     }
-
-    public void DeadInWater()
-    {
-        IsDead = true;
-        PlaySound("DEADINWATER");
-        GameManager.Instance.isGameOver = true;
-
-    }
-
 }
 
 

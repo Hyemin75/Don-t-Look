@@ -31,7 +31,7 @@ public class HUD : MonoBehaviour
     private void Awake()
     {
         MainSceneAngel = GameObject.Find("MainSceneAngel");
-    
+        fadeEffect = GetComponent<FadeEffect>();
     }
 
     private void Start()
@@ -41,8 +41,6 @@ public class HUD : MonoBehaviour
             OnGamePlayUI();
             return;
         }
-        
-        fadeEffect = GetComponent<FadeEffect>();
         
         playerCamera.SetActive(false);
         EndCamera.SetActive(false);

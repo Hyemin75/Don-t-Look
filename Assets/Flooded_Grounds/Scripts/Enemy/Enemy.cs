@@ -103,20 +103,11 @@ public class Enemy : MonoBehaviour
         
     }
 
-    void UpdateAttack()
-    {
-        
-        //º“∏Æ ∏ÿ√„
-
-    }
-
     void ChangeState(EnemyState nextState)
     {
 
         if (state == nextState)
             return;
-
-        StopAllCoroutines();
 
         prevState = state;
         state = nextState;
@@ -130,7 +121,6 @@ public class Enemy : MonoBehaviour
                 audioSource.loop = true;
                 PlaySound("MOVETOENEMY");
                 targetPos = target.transform.position;
-
                 navMeshAgent.enabled = true;
                 navMeshAgent.speed = 20f;
                 break;
