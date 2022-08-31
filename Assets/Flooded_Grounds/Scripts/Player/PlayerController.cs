@@ -63,11 +63,8 @@ public class PlayerController : MonoBehaviour
 
         MoveCameraDirection(new Vector3(x, 0, z));
         characterController.Move(moveDirector * moveSpeed * Time.deltaTime);
-
-        if (characterController.isGrounded == false)
-        {
-            moveDirector.y += gravity * Time.deltaTime;
-        }
+        
+        moveDirector.y += gravity * Time.deltaTime;
 
         switch (state)
         {
@@ -97,14 +94,15 @@ public class PlayerController : MonoBehaviour
         {
             ChangeState(PlayerState.Walk);
         }
-        if(Input.GetKey(KeyCode.Space) && characterController.isGrounded == true)
+        else if(Input.GetKey(KeyCode.Space))
         {
             ChangeState(PlayerState.Jump);
         }
-        if(Input.GetKey(KeyCode.LeftShift))
+        else if(Input.GetKey(KeyCode.LeftShift))
         {
             ChangeState(PlayerState.Run);
         }
+
     }
 
     void UpdateWalk()
@@ -113,12 +111,13 @@ public class PlayerController : MonoBehaviour
         {
             ChangeState(PlayerState.Stand);
         }
-        if (Input.GetKeyDown(KeyCode.Space) 
-            || characterController.isGrounded == true)
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             ChangeState(PlayerState.Jump);
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             ChangeState(PlayerState.Run);
         }
@@ -126,15 +125,18 @@ public class PlayerController : MonoBehaviour
 
     void UpdateJump()
     {
-        moveDirector.y = jumpForce;
+        if(characterController.isGrounded)
+        {
+            moveDirector.y = jumpForce;
+        }
 
-        if (characterController.isGrounded == true && Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift) && characterController.isGrounded == true)
         {
             ChangeState(PlayerState.Run);
         }
-        else
+        else if(characterController.isGrounded)
         {
-            ChangeState(PlayerState.Run);
+            ChangeState(PlayerState.Walk);
         }
     }
 
@@ -144,7 +146,7 @@ public class PlayerController : MonoBehaviour
         {
             ChangeState(PlayerState.Walk);
         }
-        if(Input.GetKeyUp(KeyCode.Space) && characterController.isGrounded == true)
+        if(Input.GetKeyUp(KeyCode.Space))
         {
             ChangeState(PlayerState.Jump);
         }
