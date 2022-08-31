@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
     float rx;
     float ry;
     public float rotSpeed = 200;
-
+    
     PlayerController playerController;
 
     void Start()

@@ -124,6 +124,10 @@ public class Enemy : MonoBehaviour
                 navMeshAgent.enabled = true;
                 navMeshAgent.speed = 20f;
                 break;
+                case EnemyState.Attack:
+                audioSource.loop = false;
+                PlaySound("SCREAM");
+                break;
         }
 
     }
@@ -133,6 +137,7 @@ public class Enemy : MonoBehaviour
     {
         if(isFindEnemy && other.tag == "Player" && state == EnemyState.Move)
         {
+            ChangeState(EnemyState.Attack);
             GameManager.Instance.isGameOver = true;
         }
         else if (!isFindEnemy)
