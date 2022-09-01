@@ -10,7 +10,6 @@ public class GameManager : SingletonBehaviour<GameManager>
     private bool IsGameEnd;
     private static HUD HUD;
 
-    [SerializeField]
     GameObject player;
 
     public bool isGameRestart
@@ -28,12 +27,15 @@ public class GameManager : SingletonBehaviour<GameManager>
         get => IsGameEnd; set => IsGameEnd = value;
     }
 
+    
 
     private void Awake()
     { 
         IsGameOver = false;
         IsGameEnd = false;
         IsGameRestart = false;
+
+        player = GameObject.Find("Player");    
 
         HUD = FindObjectOfType<HUD>(); 
 
@@ -51,20 +53,17 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         if(IsGameOver)
         {
-            isGameRestart = false;
             HUD.OnGameOverUI();
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                IsGameOver = false;
+                IsGameRestart = true;
+                SceneManager.LoadScene(0); // 로드 씬으로 객체들 파괴로 조치 필
+            }
         }
         
-        if (Input.GetKeyDown(KeyCode.R) && isGameOver)
-        {
-            IsGameOver = false;
-            IsGameRestart = true;
-            SceneManager.LoadScene(0); // 로드 씬으로 객체들 파괴로 조치 필
-        }
-
         if(IsGameEnd)
         {
-            player.SetActive(false);
             HUD.OnGameEndUI();
         }
     }
