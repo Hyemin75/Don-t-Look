@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Car : MonoBehaviour
 {
+
+
     [SerializeField]
     public AudioClip CarSound;
 
@@ -23,7 +25,6 @@ public class Car : MonoBehaviour
     private void Update()
     {
         MoveCar(CanMove);
-
     }
 
     public void CanMoveCar(bool arrived)

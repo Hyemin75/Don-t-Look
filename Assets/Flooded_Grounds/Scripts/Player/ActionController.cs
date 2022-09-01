@@ -38,8 +38,11 @@ public class ActionController : MonoBehaviour
     [SerializeField]
     AudioClip getItemSound;
 
+    [HideInInspector]
+    public int itemCount = 4;
+
     private bool GetLever = false;
-    
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -85,20 +88,27 @@ public class ActionController : MonoBehaviour
                 InfoDisappear();
                 inventory.AcquireItem(hitInfo.transform.GetComponent<ItemPickUp>().item);
                 PlaySound("GETITEM");
+                itemCount += 1;
+                if(hitInfo.transform.GetComponent<ItemPickUp>().name == "Lever")
+                {
+                    GetLever = true;
+                }
             }
 
-            if(hitInfo.transform.GetComponent<ItemPickUp>().name == "Lever")
-            {
-                GetLever = true;
-            }
         }
     }
 
     private void UseCar()
     {
-        if (pickupActivated)
+        if (pickupActivated && itemCount == 4)
         {
             car.CanMoveCar(true);
+        }
+        else
+        {
+            PlaySound("FAIL");
+            useText.gameObject.SetActive(true);
+            useText.text = "There is not enough oil";
         }
     }
 
@@ -158,6 +168,7 @@ public class ActionController : MonoBehaviour
             pickupActivated = true;
             actionText.gameObject.SetActive(true);
             actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + "<color=yellow>" + "(E)" + "</color>";
+        
         }
     }
 
