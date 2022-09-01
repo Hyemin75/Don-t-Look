@@ -52,6 +52,20 @@ public class HUD : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        if(GameManager.Instance.isGameOver || GameManager.Instance.isGameEnd)
+        {
+            fadeEffect.PlayerFadeOut(darkImage);
+        }
+        
+        if(GameManager.Instance.isGameRestart)
+        {
+            fadeEffect.PlayerFadeIn(darkImage);
+        }
+    }
+
+
     public void OnMainUI()
     {
         mainSceneCamera.SetActive(true);
@@ -61,7 +75,6 @@ public class HUD : MonoBehaviour
     public void OnGamePlayUI()
     {
         GameOverUI.SetActive(false);
-        fadeEffect.gameObject.SetActive(false);
 
         mainSceneCamera.SetActive(false);
         MainUI.SetActive(false);
@@ -74,8 +87,6 @@ public class HUD : MonoBehaviour
     public void OnGameOverUI()
     {
         GamePlayUI.SetActive(false);
-        fadeEffect.gameObject.SetActive(true);
-        fadeEffect.PlayerFadeOut(darkImage);
         GameOverUI.SetActive(true);
     }
 
@@ -85,8 +96,6 @@ public class HUD : MonoBehaviour
         GamePlayUI.SetActive(false);
         EndCamera.SetActive(true);
         GameEndUI.SetActive(true);
-        fadeEffect.gameObject.SetActive(true);
-        fadeEffect.PlayerFadeOut(darkImage);
     }
 
 

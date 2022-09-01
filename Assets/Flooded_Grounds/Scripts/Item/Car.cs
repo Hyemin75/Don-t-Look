@@ -38,7 +38,7 @@ public class Car : MonoBehaviour
         if (CanMove)
         {
             transform.Translate(Vector3.forward * Move);
-            GameManager.Instance.isGameEnd = true;
+            GameManager.Instance.EventGameSequence(2);
         }
     }
 

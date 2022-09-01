@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public class GameManager : SingletonBehaviour<GameManager>
 { 
@@ -11,6 +12,8 @@ public class GameManager : SingletonBehaviour<GameManager>
     private static HUD HUD;
 
     GameObject player;
+
+    public Action<int> EventGameSequence { get; private set; }
 
     public bool isGameRestart
     {
@@ -27,41 +30,35 @@ public class GameManager : SingletonBehaviour<GameManager>
         get => IsGameEnd; set => IsGameEnd = value;
     }
 
-    
-
     private void Awake()
     { 
-        player = GameObject.Find("Player");    
+        player = GameObject.Find("Player");
+        EventGameSequence += OnGameUI;
     }
-
 
     private void Start()
     {
         HUD = FindObjectOfType<HUD>();
     }
+
     private void Update()
     {
-
-        if (IsGameRestart)
+        if (IsGameOver && Input.GetKeyDown(KeyCode.R))
         {
-            HUD.OnGamePlayUI();
+            IsGameOver = false;
+            IsGameRestart = true;
+            SceneManager.LoadScene(0);
         }
 
-        if(IsGameOver)
+    }
+
+    public void OnGameUI(int _type)
+    {
+        switch(_type)
         {
-            HUD.OnGameOverUI();
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                IsGameOver = false;
-                IsGameRestart = true;
-                HUD.OnGamePlayUI();
-                SceneManager.LoadScene(0);
-            }
-        }
-        
-        if(IsGameEnd)
-        {
-            HUD.OnGameEndUI();
+            case 0: HUD.OnGamePlayUI(); break;
+            case 1: HUD.OnGameOverUI(); IsGameOver = true; break;
+            case 2: HUD.OnGameEndUI(); IsGameEnd = true; break;
         }
     }
 

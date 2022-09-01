@@ -89,7 +89,6 @@ public class Enemy : MonoBehaviour
         {
             audioSource.Stop();
             ChangeState(EnemyState.Stop);
-
             return;
         }
 
@@ -125,6 +124,7 @@ public class Enemy : MonoBehaviour
                 navMeshAgent.speed = 20f;
                 break;
                 case EnemyState.Attack:
+                GameManager.Instance.EventGameSequence(1);
                 audioSource.loop = false;
                 PlaySound("SCREAM");
                 break;

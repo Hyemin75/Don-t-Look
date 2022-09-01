@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
             case PlayerState.Walk: UpdateWalk(); break;
             case PlayerState.Run: UpdateRun(); break;
             case PlayerState.Jump: UpdateJump(); break;
-            case PlayerState.Dead: UpdateDead(); break;
+            case PlayerState.Dead: /*UpdateDead();*/ break;
         }
 
         if (transform.position.y <= WaterHeight)
@@ -185,7 +185,10 @@ public class PlayerController : MonoBehaviour
                 PlaySound("JUMP");
                 break;
             case PlayerState.Dead:
-                PlaySound("DEADINWATER"); break;
+                IsDead = true;
+                GameManager.Instance.EventGameSequence(1);
+                PlaySound("DEADINWATER");
+                break;
         }
     }
 
