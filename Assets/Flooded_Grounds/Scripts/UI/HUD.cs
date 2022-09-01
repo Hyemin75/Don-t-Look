@@ -61,11 +61,10 @@ public class HUD : MonoBehaviour
     public void OnGamePlayUI()
     {
         GameOverUI.SetActive(false);
-        
+        fadeEffect.gameObject.SetActive(false);
+
         mainSceneCamera.SetActive(false);
         MainUI.SetActive(false);
-        
-        //fadeEffect.PlayerFadeIn(darkImage);
 
         GamePlayUI.SetActive(true);
         playerCamera.SetActive(true);
@@ -75,7 +74,7 @@ public class HUD : MonoBehaviour
     public void OnGameOverUI()
     {
         GamePlayUI.SetActive(false);
-
+        fadeEffect.gameObject.SetActive(true);
         fadeEffect.PlayerFadeOut(darkImage);
         GameOverUI.SetActive(true);
     }
@@ -86,13 +85,14 @@ public class HUD : MonoBehaviour
         GamePlayUI.SetActive(false);
         EndCamera.SetActive(true);
         GameEndUI.SetActive(true);
+        fadeEffect.gameObject.SetActive(true);
         fadeEffect.PlayerFadeOut(darkImage);
     }
 
 
     public void PushStartButton()
     {
-        GameManager.Instance.isGameRestart = true;
+        Cursor.visible = false;
         OnGamePlayUI();
     }
 

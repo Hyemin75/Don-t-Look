@@ -31,20 +31,16 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void Awake()
     { 
-        IsGameOver = false;
-        IsGameEnd = false;
-        IsGameRestart = false;
-
         player = GameObject.Find("Player");    
-
-        HUD = FindObjectOfType<HUD>(); 
-
-        //HUD.Instance.OnGamePlayUI();
     }
 
+
+    private void Start()
+    {
+        HUD = FindObjectOfType<HUD>();
+    }
     private void Update()
     {
-        Cursor.visible = false;
 
         if (IsGameRestart)
         {
@@ -58,7 +54,8 @@ public class GameManager : SingletonBehaviour<GameManager>
             {
                 IsGameOver = false;
                 IsGameRestart = true;
-                SceneManager.LoadScene(0); // 로드 씬으로 객체들 파괴로 조치 필
+                HUD.OnGamePlayUI();
+                SceneManager.LoadScene(0);
             }
         }
         
