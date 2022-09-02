@@ -42,7 +42,9 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector]
     public float WaterHeight = 15.0f;
-    public bool IsDead = false; 
+    public bool IsDead = false;
+
+    bool isPause;
 
 
     private void Awake()
@@ -58,26 +60,45 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        float x = Input.GetAxisRaw("Horizontal");
-        float z = Input.GetAxisRaw("Vertical");
-
-        MoveCameraDirection(new Vector3(x, 0, z));
-        characterController.Move(moveDirector * moveSpeed * Time.deltaTime);
-        
-        moveDirector.y += gravity * Time.deltaTime;
-
-        switch (state)
+        if(GameManager.Instance.IsGameStart)
         {
-            case PlayerState.Stand: UpdateStand(); break;
-            case PlayerState.Walk: UpdateWalk(); break;
-            case PlayerState.Run: UpdateRun(); break;
-            case PlayerState.Jump: UpdateJump(); break;
-            case PlayerState.Dead: /*UpdateDead();*/ break;
-        }
+            float x = Input.GetAxisRaw("Horizontal");
+            float z = Input.GetAxisRaw("Vertical");
+            
+            MoveCameraDirection(new Vector3(x, 0, z));
+            characterController.Move(moveDirector * moveSpeed * Time.deltaTime);
+            
+            moveDirector.y += gravity * Time.deltaTime;
+            
+            switch (state)
+            {
+                case PlayerState.Stand: UpdateStand(); break;
+                case PlayerState.Walk: UpdateWalk(); break;
+                case PlayerState.Run: UpdateRun(); break;
+                case PlayerState.Jump: UpdateJump(); break;
+                case PlayerState.Dead: break;
+            }
+            
+            if (transform.position.y <= WaterHeight)
+            {
+                ChangeState(PlayerState.Dead);
+            }
+            
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                if(!isPause)
+                {
+                    GameManager.Instance.EventGameSequence(3);  
+                    isPause = true;
+                }
+                else
+                {
+                    GameManager.Instance.EventGameSequence(0);
+                    isPause = false;
 
-        if (transform.position.y <= WaterHeight)
-        {
-            ChangeState(PlayerState.Dead);
+
+                }
+            }
         }
     }
 
