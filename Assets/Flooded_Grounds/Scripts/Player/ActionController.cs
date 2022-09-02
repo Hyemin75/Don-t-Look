@@ -39,7 +39,7 @@ public class ActionController : MonoBehaviour
     AudioClip getItemSound;
 
     [HideInInspector]
-    public int itemCount = 4;
+    public int itemCount;
 
     private bool GetLever = false;
 
@@ -69,6 +69,7 @@ public class ActionController : MonoBehaviour
             }
             else if(hitInfo.transform.tag == "Car")
             {
+                Debug.Log($"{itemCount}");
                 UseCar();
             }
             else
@@ -100,7 +101,7 @@ public class ActionController : MonoBehaviour
 
     private void UseCar()
     {
-        if (pickupActivated && itemCount == 4)
+        if (pickupActivated && itemCount >= 4)
         {
             car.CanMoveCar(true);
         }
