@@ -9,11 +9,15 @@ public class GameManager : SingletonBehaviour<GameManager>
     private bool IsGameRestart;
     private bool IsGameOver;
     private bool IsGameEnd;
-    private static HUD HUD;
-
+    
+    [HideInInspector]
     public bool IsGameStart;
+    [HideInInspector]
+    public bool IsMain;
 
     GameObject player;
+
+    private static HUD HUD;
 
     public Action<int> EventGameSequence { get; private set; }
     public Action<int> EventGameStart { get; private set; }
@@ -37,11 +41,14 @@ public class GameManager : SingletonBehaviour<GameManager>
     { 
         player = GameObject.Find("Player");
         EventGameSequence += OnGameUI;
+        
+        IsGameStart = false;
     }
 
     private void Start()
     {
         HUD = FindObjectOfType<HUD>();
+        
     }
 
     private void Update()
@@ -70,7 +77,8 @@ public class GameManager : SingletonBehaviour<GameManager>
             case 0: HUD.OnGamePlayUI(); HUD.OffGamePuseUI(); break;
             case 1: HUD.OnGameOverUI(); IsGameOver = true; break;
             case 2: HUD.OnGameEndUI(); IsGameEnd = true; break;
-            case 3: HUD.OnGamePausUI(); break;   
+            case 3: HUD.OnGamePausUI(); break;  
+            case 4: SceneManager.LoadScene(0); break;
         }
     }
 

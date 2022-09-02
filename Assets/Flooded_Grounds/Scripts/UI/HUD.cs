@@ -40,7 +40,7 @@ public class HUD : MonoBehaviour
 
     private void Start()
     {
-        if(GameManager.Instance.isGameRestart == true)
+        if (GameManager.Instance.isGameRestart == true && !GameManager.Instance.IsMain == false)
         {
             OnGamePlayUI();
             return;
@@ -63,11 +63,7 @@ public class HUD : MonoBehaviour
         {
             fadeEffect.PlayerFadeOut(darkImage);
         }
-        
-        if(GameManager.Instance.isGameRestart)
-        {
-            fadeEffect.PlayerFadeIn(darkImage);
-        }
+       
     }
 
 
@@ -84,6 +80,8 @@ public class HUD : MonoBehaviour
 
     public void OnGamePlayUI()
     {
+        GameExplainUI.SetActive(false);
+
         GamePauseUI.SetActive(false);
         GameOverUI.SetActive(false);
 
@@ -125,6 +123,7 @@ public class HUD : MonoBehaviour
     {
         GameManager.Instance.IsGameStart = true;
         OnGamePlayUI();
+        OffGamePuseUI();
     }
 
     public void PushExplainButton()
@@ -134,9 +133,9 @@ public class HUD : MonoBehaviour
 
     public void PushGoToMainButton()
     {
-        GameManager.Instance.IsGameStart = false;
         OffGamePuseUI();
-        OnMainUI();
+        GameManager.Instance.IsMain = true;
+        GameManager.Instance.EventGameSequence(4);
     }
 
     public void AppExit()
