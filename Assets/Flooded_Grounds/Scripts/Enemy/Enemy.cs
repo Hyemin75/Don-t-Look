@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour
         transform.GetChild(0).gameObject.tag = "Figure";
         navMeshAgent.enabled = false;
 
-        //ÇÃ·¹ÀÌ¾î°¡ ÃÄ´Ùº¸´ÂÁö
+        //í”Œë ˆì´ì–´ê°€ ì³ë‹¤ë³´ëŠ”ì§€
         if (!isPlayerSeeing)
         {
             ChangeState(EnemyState.Move);
@@ -98,7 +98,7 @@ public class Enemy : MonoBehaviour
             navMeshAgent.speed = 8.5f;
         }
         navMeshAgent.SetDestination(target.transform.position);
-        //transform.GetChild(0).gameObjectÀÇ Äİ¶óÀÌ´õ¿¡ player ´êÀ¸¸é ¿ôÀ½¼Ò¸® Àç»ı 
+        //transform.GetChild(0).gameObjectì˜ ì½œë¼ì´ë”ì— player ë‹¿ìœ¼ë©´ ì›ƒìŒì†Œë¦¬ ì¬ìƒ 
         
     }
 
@@ -116,18 +116,18 @@ public class Enemy : MonoBehaviour
             case EnemyState.None: break;
             case EnemyState.Stop: break;
             case EnemyState.Move:
-                Debug.Log("ÃßÀû »óÅÂ ½ÃÀÛ");
-                audioSource.loop = true;
-                PlaySound("MOVETOENEMY");
-                targetPos = target.transform.position;
-                navMeshAgent.enabled = true;
-                navMeshAgent.speed = 20f;
-                break;
-                case EnemyState.Attack:
-                GameManager.Instance.EventGameSequence(1);
-                audioSource.loop = false;
-                PlaySound("SCREAM");
-                break;
+                 Debug.Log("ì¶”ì  ìƒíƒœ ì‹œì‘");
+                 audioSource.loop = true;
+                 PlaySound("MOVETOENEMY");
+                 targetPos = target.transform.position;
+                 navMeshAgent.enabled = true;
+                 navMeshAgent.speed = 20f;
+                 break;
+            case EnemyState.Attack:
+                 GameManager.Instance.EventGameSequence(1);
+                 audioSource.loop = false;
+                 PlaySound("SCREAM");
+                 break;
         }
 
     }
@@ -172,13 +172,13 @@ public class Enemy : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        Debug.Log("¾Èº½");
+        Debug.Log("ì•ˆë´„");
         isPlayerSeeing = false;
     }
 
     private void OnBecameVisible()
     {
-        Debug.Log("º½");
+        Debug.Log("ë´„");
         isPlayerSeeing = true;
     }
 
